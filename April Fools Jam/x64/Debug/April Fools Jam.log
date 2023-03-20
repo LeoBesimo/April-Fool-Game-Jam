@@ -1,0 +1,12 @@
+﻿  Game.cpp
+C:\Users\besim\Documents\Programming\C++\April Fools Jam\include\Equinox\Application\Images\Sprite.hpp(56,71): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+C:\Users\besim\Documents\Programming\C++\April Fools Jam\include\Equinox\Application\Images\Sprite.hpp(56,56): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+C:\Users\besim\Documents\Programming\C++\April Fools Jam\include\Equinox\Application\Images\Sprite.hpp(57,59): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+C:\Users\besim\Documents\Programming\C++\April Fools Jam\include\Equinox\Application\Images\Sprite.hpp(57,50): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+C:\Users\besim\Documents\Programming\C++\April Fools Jam\include\Equinox\Physics\Shapes\Materials.hpp(21,50): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\besim\Documents\Programming\C++\April Fools Jam\include\Equinox\Physics\Shapes\Materials.hpp(22,57): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\besim\Documents\Programming\C++\April Fools Jam\include\Equinox\Physics\Shapes\Materials.hpp(23,51): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\besim\Documents\Programming\C++\April Fools Jam\include\Equinox\Physics\Shapes\Materials.hpp(24,50): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\besim\Documents\Programming\C++\April Fools Jam\April Fools Jam\src\Game.cpp(18,81): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\besim\Documents\Programming\C++\April Fools Jam\April Fools Jam\src\Game.cpp(21,102): warning C4305: 'argument': truncation from 'double' to 'float'
+  April Fools Jam.vcxproj -> C:\Users\besim\Documents\Programming\C++\April Fools Jam\x64\Debug\April Fools Jam.exe
