@@ -6,6 +6,9 @@ class Player
 {
 private:
 
+	eq::BitmapTexture m_SpriteSheet;
+	eq::Sprite m_AnimationFrame;
+
 	eq::Physics::BoxShape* m_Collider;
 
 	int jumps = 1;
@@ -20,5 +23,8 @@ public:
 
 	bool hasJumps() { return jumps > 0; }
 	void setJumps(int jumps) { this->jumps = jumps; }
-	
+
+	void update();
+
+	eq::Sprite getAnimationFrame() { return m_AnimationFrame; }
 };
