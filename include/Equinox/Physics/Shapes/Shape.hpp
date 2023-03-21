@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <functional>
+#include <string>
 
 #include <Equinox/Math/eqMath.hpp>
 #include "Materials.hpp"
@@ -15,6 +16,16 @@ namespace eq
 		};
 
 		struct Manifold;
+
+		struct Tag
+		{
+			int tagId;
+			std::wstring tagName;
+
+			Tag(int id = 0, std::wstring name = L"") :
+				tagId(id), tagName(name)
+			{}
+		};
 
 		class Shape
 		{
@@ -46,6 +57,8 @@ namespace eq
 			uint32_t m_Color;
 
 			uint32_t m_IsTrigger;
+
+			Tag m_Tag;
 
 			std::function<void()> m_Trigger;
 			std::function<void(Manifold m, Shape* self)> m_OnCollision;
@@ -84,6 +97,13 @@ namespace eq
 			Math::Vector2 getBoundingMin() { return m_BoundingBoxMin; }
 			Math::Vector2 getBoundingMax() { return m_BoundingBoxMax; }
 
+			uint32_t& getColor() { return m_Color; }
+
+			std::function<void()>& getTrigger() { return this->m_Trigger; }
+			std::function<void(Manifold m, Shape* self)>& getOnCollision() { return this->m_OnCollision; }
+
+			Tag getTag() { return m_Tag; }
+
 			//Set
 			void setShapeType(ShapeType type) { this->m_Type = type; }
 			void setMaterial(Material material) { this->m_Material = material; }
@@ -109,15 +129,14 @@ namespace eq
 			void setStatic();
 
 			void setColor(const uint32_t& color) { m_Color = color; }
-			uint32_t& getColor() { return m_Color; }
 
 			void setTrigger(bool isTrigger) { this->m_IsTrigger = isTrigger; }
 			void setTriggerFunction(const std::function<void()>& func) { this->m_Trigger = func; }
 			void setOnCollisionFunction(const std::function<void(Manifold m, Shape* self)>& func) { this->m_OnCollision = func; }
 
+			void setTag(Tag tag) { m_Tag = tag; }
+
 			void trigger() { this->m_Trigger(); }
-			std::function<void()>& getTrigger() { return this->m_Trigger; }
-			std::function<void(Manifold m, Shape* self)>& getOnCollision() { return this->m_OnCollision; }
 
 			bool canRotate() { return m_InvInertia != 0; }
 			bool canMove() { return m_InvMass != 0; }

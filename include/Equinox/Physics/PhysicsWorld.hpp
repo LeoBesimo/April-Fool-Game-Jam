@@ -45,10 +45,7 @@ namespace eq
 				m_WorldBorder = 150;
 			}
 
-			void addBody(Shape* body)
-			{
-				m_Bodies.push_back(body);
-			}
+			void addBody(Shape* body);
 
 			BoxShape* addBox(
 				Math::Vector2 position,
