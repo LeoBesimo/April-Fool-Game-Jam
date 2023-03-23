@@ -12,6 +12,7 @@ private:
 	eq::Physics::BoxShape* m_Collider;
 
 	int jumps = 1;
+	bool onGround = false;
 
 public:
 	Player(eq::Math::Vector2 position);
@@ -22,7 +23,10 @@ public:
 	void applyForce(eq::Math::Vector2 force) { m_Collider->applyForce(force * m_Collider->getMass()); }
 
 	bool hasJumps() { return jumps > 0; }
+	int getJumpCount() { return jumps; }
 	void setJumps(int jumps) { this->jumps = jumps; }
+	bool isOnGround() { return onGround; }
+	void setOnGround(bool onGround) { this->onGround = onGround; }
 
 	void update();
 

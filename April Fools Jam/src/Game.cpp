@@ -7,7 +7,7 @@ Game::Game()
 	eq::Application::SetApplicationInit([&]() {
 		//eq::Application::SetFullscreen();
 		eq::Application::SetResolution(640, 480);
-	});
+		});
 
 	m_Camera = std::shared_ptr<eq::Camera>(new eq::Camera);
 	m_Camera->setPosition(eq::Math::Vector2(640 / 2, 480 / 2));
@@ -19,7 +19,7 @@ Game::Game()
 
 	m_World.setWorldGravity(eq::Math::Vector2(0, -450));
 
-	m_World.addBox(eq::Math::Vector2(0, -100), 0, eq::Physics::Material(0,0,0.01,0.9), eq::Math::Vector2(1000, 20));
+	m_World.addBox(eq::Math::Vector2(0, -100), 0, eq::Physics::Material(0, 0, 0.01, 0.9), eq::Math::Vector2(1000, 20));
 	m_World.addBox(eq::Math::Vector2(300, 30), 0, eq::Physics::Materials::STATIC, eq::Math::Vector2(100, 200));
 	//m_World.addBox(eq::Math::Vector2(), 0, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(20, 40));
 	m_World.addBody(m_Player.getCollider());
@@ -27,9 +27,10 @@ Game::Game()
 	//m_Player.setCollider(m_World.addBox(eq::Math::Vector2(0, 0), 0, eq::Physics::Material(1,0.1,0.01,0.98), eq::Math::Vector2(16*2,28*2)));
 	m_Player.getCollider()->setGravity(eq::Math::Vector2(0, -450));
 	m_Player.getCollider()->setInertia(0);
-	m_Player.getCollider()->setOnCollisionFunction([&](eq::Physics::Manifold m, eq::Physics::Shape* self){
+	m_Player.getCollider()->setOnCollisionFunction([&](eq::Physics::Manifold m, eq::Physics::Shape* self) {
 		m_Player.setJumps(1);
-	});
+	m_Player.setOnGround(true);
+		});
 }
 
 void Game::update(float delta)
@@ -40,10 +41,6 @@ void Game::update(float delta)
 	if (eq::Input::WasKeyHit(EQ_ESCAPE))
 		eq::Application::SetWindowSize(640, 480);
 
-	if (eq::Input::IsKeyPressed(EQ_SPACE))
-		eq::Renderer::SetClearColor(0xFF00FFFF);
-	else
-		eq::Renderer::SetClearColor(0xFFFFFFFF);
 
 	if (eq::Input::IsKeyPressed(EQ_D))
 		m_Player.applyForce(eq::Math::Vector2(500, 0));
@@ -52,12 +49,17 @@ void Game::update(float delta)
 
 	if (eq::Input::WasKeyHit(EQ_SPACE) || eq::Input::WasKeyHit(EQ_W))
 	{
-		m_Player.applyForce(eq::Math::Vector2(0, 2.5 * 10e3) * m_Player.hasJumps());
-		m_Player.setJumps(0);
+		if (m_Player.hasJumps() && m_Player.isOnGround())
+		{
+			m_Player.getCollider()->setVelocity(eq::Math::Vector2(m_Player.getCollider()->getVelocity().x, 0));
+			m_Player.applyForce(eq::Math::Vector2(0, 2.5 * 10e3));
+			m_Player.setOnGround(false);
+		}
+		m_Player.setJumps(m_Player.getJumpCount() - 1);
 	}
 	//m_Camera->setPosition(eq::Math::Vector2(m_Player.getCollider()->getPosition().x + 640/2, m_Camera->getPosition().y));
 
-	m_Camera->move(eq::Math::Vector2(-m_Player.getCollider()->getVelocity().x,0) * delta);
+	m_Camera->move(eq::Math::Vector2(-m_Player.getCollider()->getVelocity().x, 0) * delta);
 
 }
 
@@ -71,7 +73,7 @@ void Game::start()
 {
 	eq::Application::SetApplicationUpdate([&](float delta) {
 		this->update(delta);
-		this->render();
-	});
+	this->render();
+		});
 	eq::Application::Start();
 }
