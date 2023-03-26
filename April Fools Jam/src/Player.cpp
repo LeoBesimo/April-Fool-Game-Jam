@@ -7,7 +7,7 @@ Player::Player(eq::Math::Vector2 position)
 	
 	m_SpriteSheet.invertY();
 
-	m_Collider = new eq::Physics::BoxShape(position, 0, eq::Physics::Material(1,0,0,0.99), eq::Math::Matrix2x2(20, 0, 0, 40));
+	m_Collider = new eq::Physics::BoxShape(position, 0, eq::Physics::Material(1,0,0,0.6), eq::Math::Matrix2x2(20, 0, 0, 40));
 
 	//m_Collider->setPosition(position);
 
