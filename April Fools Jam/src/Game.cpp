@@ -30,7 +30,7 @@ Game::Game()
 	m_Player.getCollider()->setOnCollisionFunction([&](eq::Physics::Manifold m, eq::Physics::Shape* self) {
 		m_Player.setJumps(1);
 	m_Player.setOnGround(true);
-		});
+	});
 }
 
 void Game::update(float delta)

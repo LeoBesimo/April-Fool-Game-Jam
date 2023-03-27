@@ -8,10 +8,13 @@ private:
 
 	eq::BitmapTexture m_SpriteSheet;
 	eq::Sprite m_AnimationFrame;
+	std::vector<eq::Sprite> m_Animation;
 
 	eq::Physics::BoxShape* m_Collider;
 
 	int jumps = 1;
+	long animationFrame = 0;
+	int animationStep = 0;
 	bool onGround = false;
 
 public:
@@ -30,5 +33,5 @@ public:
 
 	void update();
 
-	eq::Sprite getAnimationFrame() { return m_AnimationFrame; }
+	eq::Sprite getAnimationFrame() { return m_Animation[animationFrame % m_Animation.size()]; }
 };
