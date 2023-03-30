@@ -1,7 +1,7 @@
 #include "Player.hpp"
 
 Player::Player(eq::Math::Vector2 position) :
-	eq::Physics::BoxShape(position,0,eq::Physics::Material(1,0,0.6,0.3),eq::Math::Matrix2x2(16,0,0,16))
+	eq::Physics::BoxShape(position,0,eq::Physics::Material(1,0,0.6,0.3),eq::Math::Matrix2x2(14,0,0,15))
 {
 	if (m_SpriteSheet.read("assets/wizard_walk.bmp"))
 		OutputDebugString(L"Loaded Spritesheet\n");
@@ -29,6 +29,8 @@ Player::Player(eq::Math::Vector2 position) :
 		m_AnimationLeft[i].invertX();
 		m_AnimationLeft[i].preprocessSprite();
 	}
+	
+	setTag(eq::Physics::Tag(PLAYER_TAG_ID, L"Player"));
 }
 
 void Player::update()

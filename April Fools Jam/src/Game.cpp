@@ -9,24 +9,14 @@ Game::Game()
 		eq::Application::SetResolution(640, 480);
 		});
 
-	eq::Renderer::SetClearColor(0xFF66FFFF);
+	eq::Renderer::SetClearColor(0xFF77FFFF);
 
 	m_Camera = std::shared_ptr<eq::Camera>(new eq::Camera);
 	m_Camera->setPosition(eq::Math::Vector2(640 / 2, 480 / 2));
-	//m_Camera->setTransform(eq::Math::Matrix2x2(0.3,0,0,0.3));
 	eq::Renderer::SetCamera(m_Camera);
 
-	//eq::Physics::BoxShape* box = new eq::Physics::BoxShape(eq::Math::Vector2(), 0, eq::Physics::Materials::STATIC, eq::Math::Matrix2x2(20, 0, 0, 20));
-	//m_World.addBody(box);
 
 	m_World.setWorldGravity(eq::Math::Vector2(0, -450));
-
-	//m_World.addBox(eq::Math::Vector2(0, -70), 0, eq::Physics::Material(0, 0, 1, 1), eq::Math::Vector2(1000, 20));
-	//m_World.addBox(eq::Math::Vector2(300, 30), 0, eq::Physics::Material(0,0,1,1), eq::Math::Vector2(100, 200));
-	//m_World.addBox(eq::Math::Vector2(), 0, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(20, 40));
-	//m_World.addBody(m_Player.getCollider());
-
-	//m_Player.setCollider(m_World.addBox(eq::Math::Vector2(0, 0), 0, eq::Physics::Material(1,0.1,0.01,0.98), eq::Math::Vector2(16*2,28*2)));
 	m_Player = new Player(eq::Math::Vector2(0, -40));
 
 	m_Player->setGravity(eq::Math::Vector2(0, -450));
@@ -38,18 +28,23 @@ Game::Game()
 		if (self == m.bodyA)
 			other = m.bodyB;
 
-		if (!other->isTrigger())
+		wchar_t buffer[128];
+
+		swprintf(buffer, 128, L"x: %f, y: %f, penetration: %f", m.normal.x, m.normal.y, m.penetration);
+
+		eq::Text text(eq::Math::Vector2(10, 22), std::wstring(buffer));
+		text.setCameraDependent(false);
+		//eq::Renderer::Draw(text);
+
+		if (!other->isTrigger() || other->getTag().tagName == L"Cloud")
+			m_Player->setOnGround(true);
+
+		if (((int)m.normal.y) == -1);
 		{
 			m_Player->setJumps(1);
-			m_Player->setOnGround(true);
 		}
 	});
 
-	//floor = new Floor("assets/ground.bmp",eq::Math::Vector2(0,-70),1000);
-	//platform = new Platform(eq::Math::Vector2(-60, 0), 200);
-
-	//m_World.addBody(floor);
-	//m_World.addBody(platform);
 	m_World.addBody(m_Player);
 }
 
@@ -76,17 +71,19 @@ void Game::update(float delta)
 
 	if (eq::Input::WasKeyHit(EQ_SPACE) || eq::Input::WasKeyHit(EQ_W))
 	{
-		if (m_Player->hasJumps() && m_Player->isOnGround())
+		if (m_Player->hasJumps() && (m_Player->isOnGround()))
 		{
 			m_Player->setVelocity(eq::Math::Vector2(m_Player->getVelocity().x, 0));
-			m_Player->applyForce(eq::Math::Vector2(0, 3.5 * 10e3) * m_Player->getMass());
+			m_Player->applyForce(eq::Math::Vector2(0, 3.6 * 10e3) * m_Player->getMass());
 			m_Player->setOnGround(false);
 		}
 		m_Player->setJumps(m_Player->getJumpCount() - 1);
 	}
 	//m_Camera->setPosition(eq::Math::Vector2(m_Player.getCollider()->getPosition().x + 640/2, m_Camera->getPosition().y));
 
-	m_Camera->move(eq::Math::Vector2(-m_Player->getVelocity().x, m_Player->getVelocity().y) * delta);
+	m_Camera->setPosition(eq::Math::Vector2(-m_Player->getPosition().x, m_Player->getPosition().y) + eq::Math::Vector2(640 / 2, 480 / 2 + 100));
+	
+	//m_Camera->move(eq::Math::Vector2(-m_Player->getVelocity().x, m_Player->getVelocity().y) * delta);
 
 }
 
@@ -107,6 +104,19 @@ void Game::start()
 	eq::Application::SetApplicationUpdate([&](float delta) {
 		this->update(delta);
 		this->render();
+
+#ifdef _DEBUG
+		wchar_t buffer[128];
+		swprintf(buffer, 128, L"Framerate: %0.2f", 1 / delta);
+		std::wstring frameRateText(buffer);
+		
+		eq::Text text(eq::Math::Vector2(10, 10), frameRateText);
+		text.setCameraDependent(false);
+		eq::Renderer::Draw(text);
+
+#endif // DEBUG
+
+
 	});
 	eq::Application::Start();
 }

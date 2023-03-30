@@ -8,7 +8,7 @@ class Game
 {
 private:
 
-	eq::Physics::PhysicsWorld m_World = eq::Physics::PhysicsWorld(eq::Math::Vector2(5000,3000));
+	eq::Physics::PhysicsWorld m_World = eq::Physics::PhysicsWorld(eq::Math::Vector2(5000,8000));
 	std::shared_ptr<eq::Camera> m_Camera;
 
 	Level level = Level(m_World);

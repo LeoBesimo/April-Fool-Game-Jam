@@ -1,7 +1,7 @@
 #include "Floor.hpp"
 
 Floor::Floor(eq::BitmapTexture& grass, eq::BitmapTexture& grassGold, eq::BitmapTexture& dirt, eq::BitmapTexture& dirtGold, eq::Math::Vector2 position, float height):
-	eq::Physics::BoxShape(position, 0, eq::Physics::Material(0, 0, 1, 1), eq::Math::Matrix2x2(16, 0, 0, 32))
+	eq::Physics::BoxShape(position, 0, eq::Physics::Material(0, 0, 1, 1), eq::Math::Matrix2x2(16, 0, 0, height / 2))
 
 {
 	eq::BitmapTexture goldenFloor(32,height);
@@ -34,8 +34,8 @@ Floor::Floor(eq::BitmapTexture& grass, eq::BitmapTexture& grassGold, eq::BitmapT
 	normal = eq::Sprite(normalFloor);
 	gold = eq::Sprite(goldenFloor);
 
-	normal.setPosition(position + eq::Math::Vector2(-16, 32));
-	gold.setPosition(position + eq::Math::Vector2(-16, 32));
+	normal.setPosition(position + eq::Math::Vector2(-16, getScale().b.y));
+	gold.setPosition(position + eq::Math::Vector2(-16, getScale().b.y));
 
 	normal.preprocessSprite();
 	gold.preprocessSprite();

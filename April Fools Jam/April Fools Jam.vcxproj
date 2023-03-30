@@ -124,7 +124,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -133,17 +133,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Level\Cloud.cpp" />
     <ClCompile Include="src\Level\Floor.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Level\Level.cpp" />
+    <ClCompile Include="src\Level\Mushroom.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Level\Platform.cpp" />
     <ClCompile Include="src\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Level\Cloud.hpp" />
     <ClInclude Include="src\Level\Floor.hpp" />
     <ClInclude Include="src\Game.hpp" />
     <ClInclude Include="src\Level\Level.hpp" />
+    <ClInclude Include="src\Level\Mushroom.hpp" />
     <ClInclude Include="src\Level\Platform.hpp" />
     <ClInclude Include="src\Player.hpp" />
   </ItemGroup>
