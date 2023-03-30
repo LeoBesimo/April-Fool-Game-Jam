@@ -46,6 +46,9 @@ namespace eq
 		void rotate(float angle);
 		void scale(float scaleX, float scaleY);
 
+		void invertX();
+		void invertY();
+
 		uint32_t getPixel(unsigned int x, unsigned int y);
 
 		bool isCameraDependent() { return m_CameraDependent; }

@@ -2,6 +2,7 @@
 
 #include "Equinox/Equinox.hpp"
 #include "Player.hpp"
+#include "Level/Level.hpp"
 
 class Game
 {
@@ -10,7 +11,12 @@ private:
 	eq::Physics::PhysicsWorld m_World = eq::Physics::PhysicsWorld(eq::Math::Vector2(5000,3000));
 	std::shared_ptr<eq::Camera> m_Camera;
 
-	Player m_Player = Player(eq::Math::Vector2(0,0));
+	Level level = Level(m_World);
+
+	Platform* platform;
+
+	Player* m_Player;
+
 
 public:
 	Game();

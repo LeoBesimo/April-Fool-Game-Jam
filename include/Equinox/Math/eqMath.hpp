@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include "Vector2.hpp"
 #include "Vector3.hpp"
 #include "Vector4.hpp"
@@ -33,6 +34,7 @@ namespace eq
 		extern Vector3 cross(Vector3 a, Vector3 b);
 
 		extern float map(float val, float oldMin, float oldMax, float newMin, float newMax);
+		extern float clamp(float val, float min, float max);
 
 		extern float square(float n);
 

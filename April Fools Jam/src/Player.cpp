@@ -1,33 +1,34 @@
 #include "Player.hpp"
 
-Player::Player(eq::Math::Vector2 position) 
+Player::Player(eq::Math::Vector2 position) :
+	eq::Physics::BoxShape(position,0,eq::Physics::Material(1,0,0.6,0.3),eq::Math::Matrix2x2(16,0,0,16))
 {
-	if (m_SpriteSheet.read("assets/Wizard_walk.bmp"))
+	if (m_SpriteSheet.read("assets/wizard_walk.bmp"))
 		OutputDebugString(L"Loaded Spritesheet\n");
 	
 	m_SpriteSheet.invertY();
 
-	m_Animation.push_back(eq::Sprite(m_SpriteSheet, 0, 0, 16, 16));
-	m_Animation.push_back(eq::Sprite(m_SpriteSheet, 16, 0, 16, 16));
-	m_Animation.push_back(eq::Sprite(m_SpriteSheet, 32, 0, 16, 16));
-	m_Animation.push_back(eq::Sprite(m_SpriteSheet, 48, 0, 16, 16));
+	m_AnimationRight.push_back(eq::Sprite(m_SpriteSheet, 0, 0, 16, 16));
+	m_AnimationRight.push_back(eq::Sprite(m_SpriteSheet, 16, 0, 16, 16));
+	m_AnimationRight.push_back(eq::Sprite(m_SpriteSheet, 32, 0, 16, 16));
+	m_AnimationRight.push_back(eq::Sprite(m_SpriteSheet, 48, 0, 16, 16));
 
-	for (unsigned int i = 0; i < m_Animation.size();i++)
+	m_AnimationLeft.push_back(eq::Sprite(m_SpriteSheet, 0, 0, 16, 16));
+	m_AnimationLeft.push_back(eq::Sprite(m_SpriteSheet, 16, 0, 16, 16));
+	m_AnimationLeft.push_back(eq::Sprite(m_SpriteSheet, 32, 0, 16, 16));
+	m_AnimationLeft.push_back(eq::Sprite(m_SpriteSheet, 48, 0, 16, 16));
+
+	for (unsigned int i = 0; i < m_AnimationRight.size();i++)
 	{
-		m_Animation[i].setCameraDependent(true);
-		m_Animation[i].scale(4, 4);
-		m_Animation[i].preprocessSprite();
+		m_AnimationRight[i].setCameraDependent(true);
+		m_AnimationRight[i].scale(2, 2);
+		m_AnimationRight[i].preprocessSprite();
+
+		m_AnimationLeft[i].setCameraDependent(true);
+		m_AnimationLeft[i].scale(2, 2);
+		m_AnimationLeft[i].invertX();
+		m_AnimationLeft[i].preprocessSprite();
 	}
-
-	m_Collider = new eq::Physics::BoxShape(position, 0, eq::Physics::Material(1,0,0,0.6), eq::Math::Matrix2x2(32, 0, 0, 32));
-
-	//m_Collider->setPosition(position);
-
-	m_AnimationFrame = eq::Sprite(m_SpriteSheet,0,0,16,16);
-	m_AnimationFrame.scale(2, 2);
-	m_AnimationFrame.preprocessSprite();
-	m_AnimationFrame.setCameraDependent(true);
-	//m_AnimationFrame.setPosition(eq::Math::Vector2(100, 100));
 }
 
 void Player::update()
@@ -38,9 +39,42 @@ void Player::update()
 		animationFrame++;
 		animationStep = 0;
 	}
-	int index = animationFrame % m_Animation.size();
 
-	m_Animation[index].setPosition(
-		eq::Math::Vector2(m_Collider->getPosition().x- m_Animation[index].getScaledSize().x/2,
-			m_Collider->getPosition().y + m_Animation[index].getScaledSize().y/2));
+	if (isColliding())
+		jumps = 1;
+	else
+		jumps = 0;
+
+	int index = animationFrame % m_AnimationRight.size();
+
+	if (std::abs(getVelocity().x) < 1) setVelocity(eq::Math::Vector2(0, getVelocity().y));
+	if (getVelocity().x < 0) lastDirectionLeft = true;
+	else if (getVelocity().x > 0) lastDirectionLeft = false;
+
+	setVelocity(eq::Math::Vector2(eq::Math::clamp(getVelocity().x, -300, 300), getVelocity().y));
+
+	for (unsigned int i = 0; i < m_AnimationRight.size();i++)
+	{
+		m_AnimationRight[i].setPosition(eq::Math::Vector2(
+			getPosition().x- m_AnimationRight[i].getScaledSize().x/2,
+			getPosition().y + m_AnimationRight[i].getScaledSize().y/2)
+		);
+
+		m_AnimationLeft[i].setPosition(eq::Math::Vector2(
+			getPosition().x - m_AnimationRight[i].getScaledSize().x / 2,
+			getPosition().y + m_AnimationRight[i].getScaledSize().y / 2)
+		);
+	}
+}
+
+eq::Sprite Player::getAnimationFrame()
+{
+	if (lastDirectionLeft)
+	{
+		return (getVelocity().len() > 1) ? m_AnimationLeft[animationFrame % m_AnimationLeft.size()] : m_AnimationLeft[0];
+	}
+	else
+	{
+		return (getVelocity().len() > 1) ? m_AnimationRight[animationFrame % m_AnimationRight.size()] : m_AnimationRight[0];
+	}
 }
