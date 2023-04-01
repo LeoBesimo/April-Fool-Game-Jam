@@ -22,7 +22,7 @@ Platform::Platform(eq::BitmapTexture& platform, eq::BitmapTexture& goldenPlatfor
 	}
 
 	normal = eq::Sprite(pTemp);
-	golden = eq::Sprite(golden);
+	golden = eq::Sprite(pGoldTemp);
 
 	normal.setPosition(position + eq::Math::Vector2(-width / 2, 4));
 	golden.setPosition(position + eq::Math::Vector2(-width / 2, 4));
@@ -38,9 +38,28 @@ Platform::Platform(eq::BitmapTexture& platform, eq::BitmapTexture& goldenPlatfor
 			if (self == m.bodyA)
 				other = m.bodyB;
 		
-			if (other->getVelocity().y > 0)
+			/*if (other->getVelocity().y > 0)
 				self->setTrigger(true);
 			else
+				self->setTrigger(false);*/
+			if (((int)m.normal.y) == -1)
 				self->setTrigger(false);
+			else
+				self->setTrigger(true);
+
+			if (other->getTag().tagName == L"Enemy")
+			{
+				setGolden(true);
+			}
+		
 		});
+}
+
+void Platform::setGolden(bool golden)
+{
+	isGolden = golden;
+	if (golden)
+		setMaterial(eq::Physics::Material(0, 0, 0.1, 0.1));
+	else
+		eq::Physics::Material(0, 0, 1, 1);	
 }

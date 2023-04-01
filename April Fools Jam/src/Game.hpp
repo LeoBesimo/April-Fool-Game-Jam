@@ -8,14 +8,18 @@ class Game
 {
 private:
 
-	eq::Physics::PhysicsWorld m_World = eq::Physics::PhysicsWorld(eq::Math::Vector2(5000,8000));
+	eq::Physics::PhysicsWorld m_World = eq::Physics::PhysicsWorld(eq::Math::Vector2(20000,4000));
 	std::shared_ptr<eq::Camera> m_Camera;
 
-	Level level = Level(m_World);
+	int levelIndex = 0;
+	int prevLevel = 0;
+
+	std::vector<Level> levels;
 
 	Platform* platform;
 
 	Player* m_Player;
+
 
 
 public:

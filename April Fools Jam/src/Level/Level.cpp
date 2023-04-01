@@ -10,6 +10,7 @@ void Level::loadTextures()
 	platformGold.read("assets/platform_gold.bmp");
 	cloud.read("assets/cloud.bmp");
 	mushroom.read("assets/mushroom.bmp");
+	button.read("assets/button.bmp");
 
 	grass.invertY();
 	grassGold.invertY();
@@ -19,43 +20,11 @@ void Level::loadTextures()
 	platformGold.invertY();
 	cloud.invertY();
 	mushroom.invertY();
+	button.invertY();
 }
 
-void Level::generateLevel(eq::Physics::PhysicsWorld& world)
+void Level::generateLevel(eq::Physics::PhysicsWorld& world, int& levelIndex)
 {
-	char levelData[30][40] = {
-		{'f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f'},
-		{'f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','f','f','#','f','f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','f','f','f','f','f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','c','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','#','#','c','#','#','#','#','p','p','p','p','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','f','p','p','p','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','#','#','#','#','#','f','p','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','f','f','f','f','f','f','f','f','f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','#','f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','#','f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','#','f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','#','f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','#','f','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','#','#','#','#','#','#','#','#','#','#','m','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','f'},
-		{'f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f'},
-		{'f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f'}
-	};
-
 	for (unsigned int i = 0; i < levelWidth; i++)
 	{
 		int tileHeight = 1;
@@ -80,7 +49,7 @@ void Level::generateLevel(eq::Physics::PhysicsWorld& world)
 				break;
 			}
 
-			case '#':
+			default:
 			{
 				if (previousTile == 'f')
 				{
@@ -121,23 +90,28 @@ void Level::generateLevel(eq::Physics::PhysicsWorld& world)
 			{
 			case 'p':
 			{
-				tilePosition += eq::Math::Vector2(i * 32, -j * 32);
+				/*tilePosition += eq::Math::Vector2(i * 32, -j * 32);
 
 				if (previousTile == 'p')
-					platformWidth++;
+					platformWidth++;*/
+				Platform* p = new Platform(platform, platformGold, levelOffset + eq::Math::Vector2(i * 32, -j * 32), 32);
+				world.addBody(p);
+				platformTiles.push_back(p);
+				//platformWidth = 1;
+
 				break;
 			}
 
-			case '#':
+			default:
 			{
-				if (previousTile == 'p')
+				/*if (previousTile == 'p')
 				{
 					Platform* p = new Platform(platform, platformGold, levelOffset + tilePosition / platformWidth, platformWidth * 32);
 					world.addBody(p);
 					platformTiles.push_back(p);
 					platformWidth = 1;
 					tilePosition = eq::Math::Vector2(0, 0);
-				}
+				}*/
 				break;
 			}
 			}
@@ -161,34 +135,116 @@ void Level::generateLevel(eq::Physics::PhysicsWorld& world)
 			}
 
 			case 'm':
+			{
 				Mushroom * mush = new Mushroom(mushroom, levelOffset + eq::Math::Vector2(i * 32, -j * 32));
 				world.addBody(mush);
 				mushroomTiles.push_back(mush);
 				break;
 			}
+
+			case 'b':
+			{
+				endLevel = new Button(button, eq::Math::Vector2(i * 32, -j * 32) + levelOffset);
+				endLevel->setTrigger(true);
+				endLevel->setOnCollisionFunction([&](eq::Physics::Manifold m, eq::Physics::Shape* self) {
+
+					eq::Physics::Shape* other = m.bodyA;
+					if (self == m.bodyA)
+						other = m.bodyB;
+
+					if (other->getTag().tagName == L"Player")
+						levelIndex++;
+				});
+
+				world.addBody(endLevel);
+				break;
+			}
+
+			case 'u':
+			{
+				TurnAround* turnAround = new TurnAround(levelOffset + eq::Math::Vector2(i*32, - j * 32));
+				world.addBody(turnAround);
+				break;
+			}
+
+			case 's':
+			{
+				playerStartPos = eq::Math::Vector2(i * 32, -j * 32) + levelOffset;
+				break;
+			}
+			}
 		}
 	}
 }
 
-Level::Level(eq::Physics::PhysicsWorld& world)
+void Level::loadLevel(const char* filePath)
 {
-	levelOffset = eq::Math::Vector2(-32 * 10, 32 * 10);
-	loadTextures();
-	generateLevel(world);
+	std::ifstream file(filePath);
 
-	/*for (int i = -256; i < 256; i += 32)
+	std::string str;
+
+	while (std::getline(file, str))
 	{
-		Floor* floor = new Floor(grass, grassGold, dirt, dirtGold, eq::Math::Vector2(i, -64), 128);
-		world.addBody(floor);
-		floorTiles.push_back(floor);
+		str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
+		std::vector<char> line(str.begin(), str.end());
+		levelData.push_back(line);
+		levelWidth = line.size();
+	}
 
-		if (i < 0)
-			floor->setGolden(true);
-	}*/
+	levelHeight = levelData.size();
+	file.close();
+}
 
-	/*Floor* floor = new Floor(grass, grassGold, dirt, dirtGold, eq::Math::Vector2(256, -32),128+32);
-	world.addBody(floor);
-	floorTiles.push_back(floor);*/
+void Level::generateEnemies()
+{
+	for (unsigned int i = 0; i < levelWidth; i++)
+	{
+		for (int j = 0; j < levelHeight; j++)
+		{
+			switch (levelData[j][i])
+			{
+			case 'e':
+			{
+				Enemy* enemy = new Enemy(levelOffset + eq::Math::Vector2(i * 32, -j * 32));
+				enemies.push_back(enemy);
+				physicsWorld->addBody(enemy);
+				break;
+			}
+
+			}
+		}
+	}
+}
+
+Level::Level(eq::Physics::PhysicsWorld& world, eq::Math::Vector2 offset, const char* filePath, int& levelCount)
+{
+	physicsWorld = &world;
+	levelOffset = offset;
+	loadTextures();
+	loadLevel(filePath);
+	generateLevel(world, levelCount);
+	generateEnemies();
+}
+
+void Level::reset()
+{
+	for (unsigned int i = 0; i < enemies.size(); i++)
+	{
+		eq::Physics::Tag tag = enemies[i]->getTag();
+		tag.tagId = 99;
+		enemies[i]->setTag(tag);
+	}
+
+	enemies.clear();
+	physicsWorld->removeBodyByTagID(99);
+
+	for (unsigned int i = 0; i < floorTiles.size(); i++)
+		floorTiles[i]->setGolden(false);
+	for (unsigned int i = 0; i < platformTiles.size(); i++)
+		platformTiles[i]->setGolden(false);
+
+	generateEnemies();
+
 }
 
 void Level::render()
@@ -211,5 +267,29 @@ void Level::render()
 	for (unsigned int i = 0; i < mushroomTiles.size(); i++)
 	{
 		eq::Renderer::Draw(mushroomTiles[i]->getSprite());
+	}
+
+	for (unsigned int i = 0; i < enemies.size(); i++)
+	{
+		eq::Renderer::Draw(enemies[i]->getAnimationFrame());
+	}
+
+	eq::Renderer::Draw(endLevel->getSprite());
+}
+
+void Level::update()
+{
+
+	for (int i = enemies.size() - 1; i >= 0; i--)
+	{
+		if (enemies[i]->getTag().tagId == 99)
+		{
+			enemies.erase(enemies.begin() + i);
+		}
+	}
+
+	for (unsigned int i = 0; i < enemies.size(); i++)
+	{
+		enemies[i]->update();
 	}
 }

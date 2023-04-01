@@ -14,7 +14,7 @@ private:
 public:
 	Floor(eq::BitmapTexture& grass, eq::BitmapTexture& grassGold, eq::BitmapTexture& dirt, eq::BitmapTexture& dirtGold, eq::Math::Vector2 position, float height);
 
-	void setGolden(bool golden) { isGolden = golden; }
+	void setGolden(bool golden);
 
 	eq::Sprite getSprite() { return isGolden ? gold : normal; }
 };

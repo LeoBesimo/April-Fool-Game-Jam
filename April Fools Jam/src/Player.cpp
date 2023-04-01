@@ -43,9 +43,12 @@ void Player::update()
 	}
 
 	if (isColliding())
-		jumps = 1;
+		onGround = true;
 	else
+	{ 
+		onGround = false;
 		jumps = 0;
+	}
 
 	int index = animationFrame % m_AnimationRight.size();
 

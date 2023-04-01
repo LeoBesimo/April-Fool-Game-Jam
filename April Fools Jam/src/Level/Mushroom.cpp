@@ -16,7 +16,7 @@ Mushroom::Mushroom(eq::BitmapTexture mushroomTexture, eq::Math::Vector2 position
 			if (m.bodyA == self)
 				other = m.bodyB;
 
-			if (((int)m.normal.y) == -1 && other->getTag().tagName == L"Player" && other->getVelocity().y < 0)
+			if (((int)m.normal.y) == -1 && other->getTag().tagName == L"Player" && other->getVelocity().y < 20)
 			{
 				other->setVelocity(eq::Math::Vector2(other->getVelocity().x, 450));
 			}

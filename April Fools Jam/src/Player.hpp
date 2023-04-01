@@ -27,7 +27,7 @@ public:
 
 	bool hasJumps() { return jumps > 0; }
 	int getJumpCount() { return jumps; }
-	void setJumps(int jumps) { this->jumps = jumps; }
+	void setJumps(int jum) { this->jumps = jum; }
 	bool isOnGround() { return onGround; }
 	void setOnGround(bool onGround) { this->onGround = onGround; }
 

@@ -31,6 +31,18 @@ Floor::Floor(eq::BitmapTexture& grass, eq::BitmapTexture& grassGold, eq::BitmapT
 		normalFloor.drawSprite(tempDirt,0,i);
 	}
 
+	setOnCollisionFunction([&](eq::Physics::Manifold m, eq::Physics::Shape* self) {
+		
+		eq::Physics::Shape* other = m.bodyA;
+		if (self == m.bodyA)
+			other = m.bodyB;
+		
+		if (other->getTag().tagName == L"Enemy")
+		{
+			setGolden(true);
+		}
+	});
+
 	normal = eq::Sprite(normalFloor);
 	gold = eq::Sprite(goldenFloor);
 
@@ -39,4 +51,14 @@ Floor::Floor(eq::BitmapTexture& grass, eq::BitmapTexture& grassGold, eq::BitmapT
 
 	normal.preprocessSprite();
 	gold.preprocessSprite();
+}
+
+void Floor::setGolden(bool golden)
+{
+	isGolden = golden;
+	if (golden)
+		setMaterial(eq::Physics::Material(0, 0, 0.1, 0.1));
+	else
+		eq::Physics::Material(0, 0, 1, 1);
+
 }

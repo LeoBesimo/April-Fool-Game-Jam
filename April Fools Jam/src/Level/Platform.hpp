@@ -14,7 +14,7 @@ private:
 public:
 	Platform(eq::BitmapTexture& platform, eq::BitmapTexture& goldenPlatform, eq::Math::Vector2 position, float width);
 
-	void setGolden(bool golden) { isGolden = golden; }
+	void setGolden(bool golden);
 
 	eq::Sprite getSprite() { return isGolden ? golden : normal; }
 };
